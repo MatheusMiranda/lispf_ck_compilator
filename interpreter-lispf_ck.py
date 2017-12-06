@@ -55,41 +55,52 @@ def build(source_file):
 
 function_definition = {}
 
+def generate_brain_fuck_code(command):
+    character = '' 
+    if command == 'inc':
+        character = '+'
+    
+    elif command == 'dec':
+        character = '-'
+    
+    elif command == 'right':
+        character = '>'
+    
+    elif command == 'left':
+        character = '<'
+    
+    elif command == 'print':
+        character = '.'
+    
+    elif command == 'read':
+        character = ','
+
+    return character
+
 def lf(source, ptr):
     string_de_saida = ""
+    print(source)
 
     for command in source:
-
         if isinstance(command, list):
             if command[0] == 'add':
-                print("Entrou no add")
                 string_de_saida += command[1] * '+'
 
             elif command[0] == 'sub':
                 string_de_saida += command[1] * '-'
                 
             elif command[0] == 'loop':
-                pass
-
+                string_de_saida += '['
+                for i in range(1,len(command)):
+                    element_command = command[i]
+                    if(isinstance(element_command,list)):
+                        pass
+                    else:
+                        string_de_saida += generate_brain_fuck_code(element_command)
+                string_de_saida += ']'
 
         elif isinstance(command, str):
-            if command == 'inc':
-                string_de_saida +='+'
-            
-            elif command == 'dec':
-                string_de_saida +='-'
-            
-            elif command == 'right':
-                string_de_saida +='>'
-            
-            elif command == 'left':
-                string_de_saida +='<'
-            
-            elif command == 'print':
-                string_de_saida +='.'
-            
-            elif command == 'read':
-                string_de_saida +=','
+            string_de_saida += generate_brain_fuck_code(command)
 
     print("String de saida deu", string_de_saida)
 
