@@ -51,11 +51,11 @@ def build(source_file):
     tokens = [value for value in tokens if str(value)[:7] != 'COMMENT' and str(value)[:8] != 'NEW_LINE']
     ast = parser(tokens)
 
-    lf(ast, ptr)
+    interpret_lisp_f_ck_code(ast, ptr)
 
 function_definition = {}
 
-def generate_brain_fuck_code(command):
+def generate_brain_f_ck_code(command):
     character = '' 
     if command == 'inc':
         character = '+'
@@ -77,65 +77,34 @@ def generate_brain_fuck_code(command):
 
     return character
 
-def lf(source, ptr):
-    string_de_saida = ""
-    print(source)
+def interpret_lisp_f_ck_code(source, ptr):
+    brain_f_ck_code = ""
 
     for command in source:
-        if isinstance(command, list):
-            if command[0] == 'add':
-                string_de_saida += command[1] * '+'
+        brain_f_ck_code += process_by_command(command)
 
-            elif command[0] == 'sub':
-                string_de_saida += command[1] * '-'
-                
-            elif command[0] == 'loop':
-                string_de_saida += '['
-                for i in range(1,len(command)):
-                    element_command = command[i]
-                    if(isinstance(element_command,list)):
-                        pass
-                    else:
-                        string_de_saida += generate_brain_fuck_code(element_command)
-                string_de_saida += ']'
+    print(brain_f_ck_code)
 
-        elif isinstance(command, str):
-            string_de_saida += generate_brain_fuck_code(command)
-
-    print("String de saida deu", string_de_saida)
-
-      #  elif command == 'do-after':
-      #      i = 0
-      #      while i < len(source[2]):
-      #          lista = ['do', source[1], source[2][i]]
-      #          lf(lista, ptr)
-      #          i += 1
-
-      #  elif command == 'do-before':
-      #      i = 0
-      #      while i < len(source[2]):
-      #          lista = ['do', source[2][i], source[1]]
-      #          lf(lista, ptr)
-      #          i += 1
-
-      #  elif command == 'loop':
-      #      while data[ptr] != 1:
-      #          lf(source[1:len(source)], ptr)
-
-      #  elif command == 'def':
-      #      function_definition[source[1]] = [source[2], source[3]]
-
-      #  elif command == 'add':
-      #      data[ptr] = (data[ptr] + int(source[1])) % 256
-
-      #  elif command == 'sub':
-      #      data[ptr] = (data[ptr] - int(source[1])) % 256
-
-
-      #  elif command in function_definition:
-      #      lista = function_definition[command][1]
-      #      lf(lista, ptr)
-
+def process_by_command(command):
+    if isinstance(command, list):
+        if command[0] == 'add':
+            return command[1] * '+'
+    
+        elif command[0] == 'sub':
+            return command[1] * '-'
+            
+        elif command[0] == 'loop':
+            aux = ''
+            aux += '['
+            for i in range(1,len(command)):
+                element_command = command[i]
+                aux += process_by_command(element_command)
+            aux += ']'
+            return aux
+    
+    elif isinstance(command, str):
+        return generate_brain_f_ck_code(command)
+    
 
 if __name__ == '__main__':
     build()
